@@ -142,11 +142,23 @@ const Inicio = () => {
             homeService.getCatalogoMujer().catch(() => null)
         ]).then(([dataHombre, dataMujer]) => {
             let all = [];
-            if (dataHombre && Array.isArray(dataHombre.productos)) {
-                all = all.concat(dataHombre.productos.map(p => ({ ...p, catalogoPadre: 'hombre' })));
+
+            // Extract products from Hombre
+            let productosHombre = [];
+            if (dataHombre) {
+                productosHombre = Array.isArray(dataHombre) ? dataHombre : (dataHombre.productos || []);
             }
-            if (dataMujer && Array.isArray(dataMujer.productos)) {
-                all = all.concat(dataMujer.productos.map(p => ({ ...p, catalogoPadre: 'mujer' })));
+            if (Array.isArray(productosHombre)) {
+                all = all.concat(productosHombre.map(p => ({ ...p, catalogoPadre: 'hombre' })));
+            }
+
+            // Extract products from Mujer
+            let productosMujer = [];
+            if (dataMujer) {
+                productosMujer = Array.isArray(dataMujer) ? dataMujer : (dataMujer.productos || []);
+            }
+            if (Array.isArray(productosMujer)) {
+                all = all.concat(productosMujer.map(p => ({ ...p, catalogoPadre: 'mujer' })));
             }
             const destacados = all.filter(p => p.destacado);
             setProductosCatalogoDestacados(destacados.slice(0, 4));
