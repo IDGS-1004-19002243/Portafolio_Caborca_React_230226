@@ -142,8 +142,12 @@ const Inicio = () => {
             homeService.getCatalogoMujer().catch(() => null)
         ]).then(([dataHombre, dataMujer]) => {
             let all = [];
-            if (dataHombre && Array.isArray(dataHombre.productos)) all = all.concat(dataHombre.productos);
-            if (dataMujer && Array.isArray(dataMujer.productos)) all = all.concat(dataMujer.productos);
+            if (dataHombre && Array.isArray(dataHombre.productos)) {
+                all = all.concat(dataHombre.productos.map(p => ({ ...p, catalogoPadre: 'hombre' })));
+            }
+            if (dataMujer && Array.isArray(dataMujer.productos)) {
+                all = all.concat(dataMujer.productos.map(p => ({ ...p, catalogoPadre: 'mujer' })));
+            }
             const destacados = all.filter(p => p.destacado);
             setProductosCatalogoDestacados(destacados.slice(0, 4));
         });
